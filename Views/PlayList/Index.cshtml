@@ -1,0 +1,45 @@
+﻿@model IEnumerable<PlayListView>
+
+@{
+    ViewData["Title"] = "Playlist";
+}
+
+<h2>Playlist</h2>
+
+<div>
+    <label>Fechas </label>
+    <select id="addedAt">
+        @foreach (var fecha in ViewBag.Fechas)
+        {
+            <option value="@fecha" label="@fecha.ToString("yyyy-MM-dd")"></option>
+        }
+    </select>
+</div>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Artist</th>
+            <th>Song</th>
+            <th>Album</th>
+            <th>Ver Album</th>
+            <th>Revisado</th>
+            <th>Like</th>            
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(var item in Model)
+        {
+            <tr>
+                <td>@item.Artist</td>    
+                <td>@item.Song</td>
+                <td>@item.Album</td>
+                <td><a class="btn btn-primary" asp-action="VerAlbum" asp-route-url="@item.AlbumImageUrl">Ver</a></td>
+                <td>@item.Revisado</td>
+                <td>@item.Like</td>
+            </tr>            
+        }
+
+    </tbody>
+    
+</table>
