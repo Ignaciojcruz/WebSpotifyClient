@@ -1,15 +1,19 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using WebSpotifyClient.Interfaces;
+using WebSpotifyClient.Models;
 
 namespace WebSpotifyClient.Controllers
 {
     public class PlayListController : Controller
     {
         private readonly IRepositorioPlayList _repositorioPlayList;
+        private readonly IRepositorioArtist _repositorioArtist;
 
-        public PlayListController(IRepositorioPlayList repositorioPlayList) 
+        public PlayListController(IRepositorioPlayList repositorioPlayList
+                                    , IRepositorioArtist repositorioArtist) 
         {
             this._repositorioPlayList = repositorioPlayList;
+            this._repositorioArtist = repositorioArtist;
         }
         
         
@@ -42,5 +46,16 @@ namespace WebSpotifyClient.Controllers
             
             return View();        
         }
+
+        [HttpPost]
+        public async Task<IActionResult> Actualiza(PlayListView modelo)
+        {
+            //actualizar artista
+            await _repositorioArtist.Actualizar(modelo.IdArtist, modelo.Like, modelo.Revisado);
+
+            return RedirectToAction("Index");
+        }
+
+
     }
 }

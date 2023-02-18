@@ -1,5 +1,6 @@
 ﻿using Dapper;
 using Microsoft.Data.SqlClient;
+using System.Data;
 using WebSpotifyClient.Interfaces;
 using WebSpotifyClient.Models;
 
@@ -39,6 +40,20 @@ namespace WebSpotifyClient.Servicios
                                                     }
                                                     , commandType: System.Data.CommandType.StoredProcedure);
             artist.Id = id;
+        }
+
+        //Actualiza registro
+        public async Task Actualizar(int id, bool like, bool revisado)
+        {
+            using var connection = new SqlConnection(connectionString);
+            await connection.ExecuteAsync("Sp_Artist_Update"
+                                                    , new
+                                                    {
+                                                        Id = id,
+                                                        Like = like,
+                                                        Revisado = revisado
+                                                    }
+                                                    , commandType: System.Data.CommandType.StoredProcedure);
         }
     }
 }
