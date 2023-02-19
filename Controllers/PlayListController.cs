@@ -56,6 +56,21 @@ namespace WebSpotifyClient.Controllers
             return RedirectToAction("Index");
         }
 
+        [HttpGet]
+        public async Task<IActionResult> VerListaAlbum()
+        {
+            //Buscar datos playlist
+            DateTime addedAt = new DateTime(1900, 1, 1);
+            var playList = await _repositorioPlayList.ObtenerPlaylistView(addedAt);
+
+            //List<string> urls = playList.Select(p => p.AlbumImageUrl).ToList();
+
+            //ViewBag.listado = urls;
+
+            return View(playList);
+
+        }
+
 
     }
 }
