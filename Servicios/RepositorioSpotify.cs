@@ -93,6 +93,13 @@ namespace WebSpotifyClient.Servicios
                     track.ExternalUrl = fullTrack.ExternalUrls["spotify"].ToString();
                     await _repositorioTrack.Crear(track);
 
+                    //Album
+                    Album album = new Album();
+                    album.IdSpotify = fullTrack.Album.Id;
+                    album.Name = fullTrack.Album.Name;
+                    album.ExternalUrl = fullTrack.Album.ExternalUrls["spotify"].ToString();
+                    await _repositorioAlbum.Crear(album);
+
                     //Artists
                     foreach (SimpleArtist art in fullTrack.Artists)
                     {
@@ -115,15 +122,9 @@ namespace WebSpotifyClient.Servicios
                         relationArtistAlbum.IdAlbum = fullTrack.Album.Id;
                         await _repositorioRelationArtistAlbum.Crear(relationArtistAlbum);
 
-
                     }
 
-                    //Album
-                    Album album = new Album();
-                    album.IdSpotify = fullTrack.Album.Id;
-                    album.Name = fullTrack.Album.Name;
-                    album.ExternalUrl = fullTrack.Album.ExternalUrls["spotify"].ToString();
-                    await _repositorioAlbum.Crear(album);
+                    
 
                     //Image album
                     foreach (var img in fullTrack.Album.Images)
@@ -155,6 +156,34 @@ namespace WebSpotifyClient.Servicios
 
             
 
+        }
+
+        public async Task<List<string>> GetAlbumImages(string idArtist)
+        {
+            //conecta a spotify
+            var spotify = await Conecta(); 
+
+            //descargar listado de albumes asociados al artista
+            var response = spotify.Artists.GetAlbums(idArtist);
+
+            Paging<SimpleAlbum> albumes = await response;
+
+            List<string> imagenes = new List<string>();
+                        
+            foreach (var item in albumes.Items)
+            {                
+                foreach (var img in item.Images)
+                {
+                    if(img.Height > 600)
+                    {                        
+                        imagenes.Add(img.Url);
+                    }                    
+                }
+            }
+
+            return imagenes;
+
+            
         }
     }
 }

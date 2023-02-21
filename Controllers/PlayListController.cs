@@ -8,12 +8,15 @@ namespace WebSpotifyClient.Controllers
     {
         private readonly IRepositorioPlayList _repositorioPlayList;
         private readonly IRepositorioArtist _repositorioArtist;
+        private readonly IRepositorioSpotify _repositorioSpotify;
 
         public PlayListController(IRepositorioPlayList repositorioPlayList
-                                    , IRepositorioArtist repositorioArtist) 
+                                    , IRepositorioArtist repositorioArtist
+                                    , IRepositorioSpotify repositorioSpotify) 
         {
             this._repositorioPlayList = repositorioPlayList;
             this._repositorioArtist = repositorioArtist;
+            this._repositorioSpotify = repositorioSpotify;
         }
         
         
@@ -40,9 +43,12 @@ namespace WebSpotifyClient.Controllers
         }
 
         [HttpGet]
-        public IActionResult VerAlbum(string url)
+        public async Task<IActionResult> VerAlbum(string id)
         {
-            ViewBag.Url = url;  
+           
+            //con el id ir a buscar todas las imagenes de albumes/artista 
+            List<string> imagenes = await _repositorioSpotify.GetAlbumImages(id);
+            ViewBag.imagenes = imagenes;            
             
             return View();        
         }
