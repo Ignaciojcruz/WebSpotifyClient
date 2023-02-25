@@ -1,0 +1,97 @@
+﻿@model List<Album>
+
+@{
+    ViewData["Title"] = "Albumes del artista";
+}
+
+<body style="background-color:black">
+    <div class="row">
+        <div class="col-md-6">
+            <div id="carousel" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-inner">
+                    @{
+                        int j = 0;
+                        @foreach (Album item in Model)
+                        {
+                            string active = j == 0 ? "active" : "";
+                            <div class="carousel-item @active" data-name="@item.Name" data-propiedad-lista="@item.Tracks">
+                                <img src="@item.UrlImage" class="d-block" />                            
+                            </div>
+
+                            j++;
+                        }
+                    }
+
+                </div>
+
+                <div class="carousel-indicators">
+                    @{
+                        int i = 0;
+                        @foreach (Album item in Model)
+                        {
+                            string active = i == 0 ? "active" : "";
+                            <button type="button" data-bs-target="#carousel" data-bs-slide-to="@i" class="@active"></button>
+                            i++;
+                        }
+                    }
+                </div>
+
+                <button class="carousel-control-prev" type="button" data-bs-target="#carousel" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon"></span>
+                </button>
+
+                <button class="carousel-control-next" type="button" data-bs-target="#carousel" data-bs-slide="next">
+                    <span class="carousel-control-next-icon"></span>
+                </button>
+
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <p id="titulo" style="color: white"></p>
+
+            <ul id="lista" style="color: white"></ul>
+        </div>
+    </div>
+
+
+
+    @section Scripts
+        {
+        <script>
+            var myCarousel = document.querySelector('#carousel');
+            var carouselText = document.querySelector("#carousel-text")
+
+            myCarousel.addEventListener('slid.bs.carousel', function (event) {
+                var activeSlide = event.relatedTarget                
+                var slideNumber = Array.from(myCarousel.querySelectorAll('.carousel-item')).indexOf(activeSlide) + 1;
+                carouselText.textContent = 'Slide ' + slideNumber;
+
+            })
+
+            $('#carousel').on('slid.bs.carousel', function () {
+                var elementoActual = $('.carousel-item.active'); // Encontramos el elemento actual del Carousel
+                var propiedad = elementoActual.data('name'); // Obtenemos la propiedad del elemento actual
+                $('#titulo').text(propiedad); // Mostramos la propiedad en el elemento <p>
+
+                //var cadenaJson = elementoActual.data('propiedad-lista');
+                //console.log(cadenaJson);
+                //var propiedadLista = JSON.parse(cadenaJson);
+                //console.log(propiedadLista);
+
+                //$('#lista').empty();
+
+                //propiedadLista.forEach(function (elemento) {
+                //    var elementoLi = $('<li>').text(elemento);
+                //    $('#lista').append(elementoLi);
+                //});
+            })
+
+
+
+
+
+
+        </script>
+    }
+</body>

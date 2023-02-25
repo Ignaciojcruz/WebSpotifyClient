@@ -43,14 +43,17 @@ namespace WebSpotifyClient.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> VerAlbum(string id)
+        public async Task<IActionResult> VerAlbumsArtist(string id)
         {
-           
+
             //con el id ir a buscar todas las imagenes de albumes/artista 
-            List<string> imagenes = await _repositorioSpotify.GetAlbumImages(id);
-            ViewBag.imagenes = imagenes;            
-            
-            return View();        
+            //List<string> imagenes = await _repositorioSpotify.GetAlbumImages(id);
+            //ViewBag.imagenes = imagenes;
+
+            //con el id del artista ir a buscar todas las imagenes de albumes/artista 
+            List<Album> modelo = await _repositorioSpotify.GetAlbums(id);
+
+            return View(modelo);        
         }
 
         [HttpPost]

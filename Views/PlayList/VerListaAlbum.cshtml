@@ -5,46 +5,54 @@
 }
 
 <body style="background-color:black">
-<div class="float-start w75">
-    <div id="carousel" class="carousel slide" data-bs-ride="carousel" > 
-        <div class="carousel-inner">
-            @{
-                int j = 0;
-                @foreach (var item in Model)
-                {
-                    string active = j == 0 ? "active" : "";
-                    <div class="carousel-item @active">
-                        <img src="@item.AlbumImageUrl" class="d-block" />
-                            <div class="carousel-caption d-none d-md-block">
-                                <h5>@item.Album</h5>                                
-                            </div>
-                    </div>  
+<div class="row">
+    <div class="col-md-6">
+        <div id="carousel" class="carousel slide" data-bs-ride="carousel" > 
+            <div class="carousel-inner">
+                @{
+                    int j = 0;
+                    @foreach (var item in Model)
+                    {
+                        string active = j == 0 ? "active" : "";
+                        <div class="carousel-item @active">
+                            <img src="@item.AlbumImageUrl" class="d-block" />
+                                <div class="carousel-caption d-none d-md-block">
+                                    <h5>@item.Album</h5>                                
+                                </div>
+                        </div>  
                     
-                    j++;
-                } 
-            }
-               
-        </div>
-
-        <div class="carousel-indicators">        
-            @{  int i = 0;
-                @foreach (var item in Model)
-                {
-                    string active = i == 0 ? "active" : "";
-                    <button type="button" data-bs-target="#carousel" data-bs-slide-to="@i" class="@active" ></button>
-                    i++;
+                        j++;
+                    } 
                 }
-            }
+               
+            </div>
+
+            <div class="carousel-indicators">        
+                @{  int i = 0;
+                    @foreach (var item in Model)
+                    {
+                        string active = i == 0 ? "active" : "";
+                        <button type="button" data-bs-target="#carousel" data-bs-slide-to="@i" class="@active" ></button>
+                        i++;
+                    }
+                }
+            </div>
+
+            <button class="carousel-control-prev" type="button" data-bs-target="#carousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon"></span>
+            </button>
+
+            <button class="carousel-control-next" type="button" data-bs-target="#carousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon"></span>
+            </button>
+
         </div>
+    </div>
 
-        <button class="carousel-control-prev" type="button" data-bs-target="#carousel" data-bs-slide="prev">
-            <span class="carousel-control-prev-icon"></span>
-        </button>
+    <div class="col-md-6">
+        <p style="color: white" > Aun no trabajo acá</p>
 
-        <button class="carousel-control-next" type="button" data-bs-target="#carousel" data-bs-slide="next">
-            <span class="carousel-control-next-icon"></span>
-        </button>
-
+            <p style="color: white"> Aun no trabajo acá</p>
     </div>
 </div>
 

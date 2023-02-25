@@ -1,9 +1,13 @@
 ﻿using SpotifyAPI.Web;
+using System.Diagnostics.CodeAnalysis;
 using WebSpotifyClient.Interfaces;
 using WebSpotifyClient.Models;
+using Newtonsoft.Json;
+using System.Runtime.InteropServices;
 
 namespace WebSpotifyClient.Servicios
 {
+    
     public class RepositorioSpotify : IRepositorioSpotify
     {
         private readonly IRepositorioPlayList _repositorioPlayList;
@@ -46,6 +50,7 @@ namespace WebSpotifyClient.Servicios
                 .CreateDefault()
                 .WithAuthenticator(new ClientCredentialsAuthenticator(clientId, clientSecret));
 
+            
             return new SpotifyClient(config);
         }
 
@@ -158,30 +163,73 @@ namespace WebSpotifyClient.Servicios
 
         }
 
-        public async Task<List<string>> GetAlbumImages(string idArtist)
+        public async Task<List<Album>> GetAlbums(string idArtist)
         {
+                        
             //conecta a spotify
             var spotify = await Conecta(); 
 
             //descargar listado de albumes asociados al artista
-            var response = spotify.Artists.GetAlbums(idArtist);
+            ArtistsAlbumsRequest albumsRequest = new ArtistsAlbumsRequest();
+            albumsRequest.Limit = 50;
+            var response = spotify.Artists.GetAlbums(idArtist, albumsRequest);
 
             Paging<SimpleAlbum> albumes = await response;
+            List<Album> listaAlbum = new List<Album>();
 
-            List<string> imagenes = new List<string>();
-                        
             foreach (var item in albumes.Items)
-            {                
+            {
+                Album album = new Album();
+
+                //llenar objeto
+                album.Name = item.Name + " - " + item.ReleaseDate.Substring(0, 4);
+                album.Year = Convert.ToInt32(item.ReleaseDate.Substring(0,4));
+                album.ExternalUrl = item.ExternalUrls["spotify"];
+
+                //obtiene url imagen
                 foreach (var img in item.Images)
                 {
-                    if(img.Height > 600)
-                    {                        
-                        imagenes.Add(img.Url);
-                    }                    
+                    if (img.Height > 600)
+                    {
+                        album.UrlImage = img.Url;
+                        break;
+                    }
                 }
+
+                //obtiene listado artista
+                List<Artist> listaArtistas = new List<Artist>();
+                foreach (var art in item.Artists)
+                {
+                    Artist artist = new Artist();
+                    artist.IdSpotify = art.Id;
+                    artist.Name = art.Name;
+
+                    listaArtistas.Add(artist);
+                }
+                album.Artists = listaArtistas;
+
+                //recuperar listado de tracks
+                List<Track> listaTracks = new List<Track>();
+                var respoonseTracks = await spotify.Albums.GetTracks(item.Id);
+                Paging<SimpleTrack> tracks = respoonseTracks;
+                //listaTracks.Add("{[");
+                foreach (var track in tracks.Items)
+                {
+                    Track t = new Track();
+                    t.Name = track.Name;
+                    t.TrackNumber = track.TrackNumber;
+                    t.IdSpotify = track.Id;
+
+                    listaTracks.Add(t);                    
+                }
+                //listaTracks.Add("}");
+
+                album.Tracks =  listaTracks;
+
+                listaAlbum.Add(album);
             }
 
-            return imagenes;
+            return listaAlbum;
 
             
         }
