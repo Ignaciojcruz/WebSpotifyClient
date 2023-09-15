@@ -1,14 +1,55 @@
 ﻿@model IEnumerable<PlayListView>
 
 @{
-    ViewData["Title"] = "Playlist";
 }
 
-<body class="dark-mode">
-    <div id="listado">
-        <partial name="_Playlist" />
-    </div>
-</body>
+<h2>Playlist</h2>
+
+
+<label>Fechas </label>
+<select id="cmbFechas">
+    @foreach (var fecha in ViewBag.Fechas)
+    {
+        <option value="@fecha" label="@fecha.ToString("yyyy-MM-dd")"></option>
+    }
+</select>
+
+
+<form id="formulario">
+    <table class="table dark-mode">
+        <thead>
+            <tr>
+                <th>Artist</th>
+                <th>Song</th>
+                <th>Album</th>
+                <th>Ver Album</th>
+                <th>Revisado</th>
+                <th>Like</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Artist</td>
+                    <td>@item.Song</td>
+                    <td>@item.Album</td>
+                    <td><a class="btn btn-light dark-mode" asp-action="VerAlbumsArtist" asp-route-id="@item.idArtistSpotify">Ver</a></td>
+
+
+                    <td class="text-center">
+                        <input type="checkbox" asp-for="@item.Revisado" class="form-check-input" id="@item.IdArtist-check" name="CheckItems[@item.IdArtist]" />
+                    </td>
+
+                    <td class="text-center"><input type="checkbox" asp-for="@item.Like" class="form-check-input" id="@item.IdArtist-checklike" /></td>
+                </tr>
+
+            }
+
+        </tbody>
+
+    </table>
+</form>
 
 @section Scripts {
     <script>
@@ -56,4 +97,3 @@
 
     </script>
 }
-

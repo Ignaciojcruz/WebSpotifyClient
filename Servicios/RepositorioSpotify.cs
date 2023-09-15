@@ -18,6 +18,7 @@ namespace WebSpotifyClient.Servicios
         private readonly IRepositorioRelationTrackArtist _repositorioRelationTrackArtist;
         private readonly IRepositorioRelationPlayListTrack _repositorioRelationPlayListTrack;
         private readonly IRepositorioRelationArtistAlbum _repositorioRelationArtistAlbum;
+        private readonly IRepositorioRelationAlbumTrack _repositorioRelationAlbumTrack;
         private string clientId;
         private string clientSecret;
 
@@ -29,6 +30,7 @@ namespace WebSpotifyClient.Servicios
                                 , IRepositorioRelationTrackArtist repositorioRelationTrackArtist
                                 , IRepositorioRelationPlayListTrack repositorioRelationPlayListTrack
                                 , IRepositorioRelationArtistAlbum repositorioRelationArtistAlbum
+                                , IRepositorioRelationAlbumTrack repositorioRelationAlbumTrack
                                 , IConfiguration configuration
                                     ) 
         {
@@ -40,6 +42,7 @@ namespace WebSpotifyClient.Servicios
             _repositorioRelationTrackArtist = repositorioRelationTrackArtist;
             _repositorioRelationPlayListTrack = repositorioRelationPlayListTrack;
             _repositorioRelationArtistAlbum = repositorioRelationArtistAlbum;
+            _repositorioRelationAlbumTrack = repositorioRelationAlbumTrack;
             clientId = configuration.GetValue<string>("CLIENT_ID");
             clientSecret = configuration.GetValue<string>("CLIENT_SECRET");
             
@@ -89,8 +92,7 @@ namespace WebSpotifyClient.Servicios
                 foreach (var item in fullPlaylist.Tracks.Items)
                 {
                     FullTrack fullTrack = (FullTrack)item.Track;
-
-                    
+                                                            
                     //Track
                     Track track= new Track();
                     track.IdSpotify=fullTrack.Id;
@@ -104,6 +106,12 @@ namespace WebSpotifyClient.Servicios
                     album.Name = fullTrack.Album.Name;
                     album.ExternalUrl = fullTrack.Album.ExternalUrls["spotify"].ToString();
                     await _repositorioAlbum.Crear(album);
+
+                    //RelationAlbumTrack
+                    RelationAlbumTrack relAlbumTrack = new RelationAlbumTrack();
+                    relAlbumTrack.IdAlbum = fullTrack.Album.Id;
+                    relAlbumTrack.IdTrack = fullTrack.Id;
+                    await _repositorioRelationAlbumTrack.Crear(relAlbumTrack);                    
 
                     //Artists
                     foreach (SimpleArtist art in fullTrack.Artists)
@@ -126,6 +134,8 @@ namespace WebSpotifyClient.Servicios
                         relationArtistAlbum.IdArtist = art.Id;
                         relationArtistAlbum.IdAlbum = fullTrack.Album.Id;
                         await _repositorioRelationArtistAlbum.Crear(relationArtistAlbum);
+
+                        
 
                     }
 

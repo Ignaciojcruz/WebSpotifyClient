@@ -8,8 +8,12 @@
         public string Album { get; set; }
         public string AlbumImageUrl { get; set; }
         public bool Revisado { get; set; }
-        public bool Like { get; set; }                
+        public bool Like { get; set; }
         public DateTime AddedAt { get; set; }
         public string idArtistSpotify { get; set; }
+
+
+
+
     }
 }

@@ -26,7 +26,8 @@ namespace WebSpotifyClient.Controllers
             //buscar fechas de playlist almacenadas para poblar combo
             ViewBag.Fechas = await _repositorioPlayList.ObtenerFechas();
 
-            //Buscar datos playlist
+            //Buscar datos playlist            
+            
             DateTime addedAt = new DateTime(1900, 1, 1);
             var playList = await _repositorioPlayList.ObtenerPlaylistView(addedAt);
             
@@ -35,11 +36,19 @@ namespace WebSpotifyClient.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Index(DateTime fecha)
+        public async Task<IActionResult> Index(DateTime addedAt)
         {
-            //buscar datos en playlist asociados a la fecha
+            //buscar fechas de playlist almacenadas para poblar combo
+            ViewBag.Fechas = await _repositorioPlayList.ObtenerFechas();
 
-            return View();
+            //buscar datos en playlist asociados a la fecha            
+            if (addedAt.ToString() == "01-01-0001 0:00:00") addedAt = new DateTime(1900, 1, 1);
+
+            DateTime fechaFormateada = new DateTime(addedAt.Year, addedAt.Month, addedAt.Day);
+
+            var playList = await _repositorioPlayList.ObtenerPlaylistView(fechaFormateada);
+
+            return PartialView(playList);
         }
 
         [HttpGet]

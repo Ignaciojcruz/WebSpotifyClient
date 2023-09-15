@@ -14,6 +14,7 @@ builder.Services.AddTransient<IRepositorioImage, RepositorioImage>();
 builder.Services.AddTransient<IRepositorioRelationTrackArtist, RepositorioRelationTrackArtist>();
 builder.Services.AddTransient<IRepositorioRelationPlayListTrack, RepositorioRelationPlayListTrack>();
 builder.Services.AddTransient<IRepositorioRelationArtistAlbum, RepositorioRelationArtistAlbum>();
+builder.Services.AddTransient<IRepositorioRelationAlbumTrack, RepositorioRelationAlbumTrack>();
 
 var app = builder.Build();
 
