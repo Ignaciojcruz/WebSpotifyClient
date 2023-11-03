@@ -236,6 +236,8 @@ namespace WebSpotifyClient.Servicios
 
                 album.Tracks =  listaTracks;
 
+                album.TracksJson = JsonConvert.SerializeObject(listaTracks);
+
                 listaAlbum.Add(album);
             }
 

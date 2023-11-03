@@ -7,7 +7,7 @@
         public List<Artist> Artists { get; set; }
         public List<Track> Tracks { get; set; }
 
-        
+        public string TracksJson { get; set; }
 
     }
 }

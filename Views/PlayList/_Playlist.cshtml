@@ -8,22 +8,30 @@
 
 <label>Fechas </label>
 <select id="cmbFechas">
-    @foreach (var fecha in ViewBag.Fechas)
-    {
-        <option value="@fecha" label="@fecha.ToString("yyyy-MM-dd")"></option>
+    @{
+        string sel="";        
+        @foreach (var fecha in ViewBag.Fechas)
+        {           
+            sel = 2 == 2 ? "selected" : "";
+            <option value="@fecha" label="@fecha.ToString("yyyy-MM-dd")"></option>
+            
+        }
     }
+    
+        
 </select>
+
 
 
 <form id="formulario">
     <table class="table dark-mode">
         <thead>
             <tr>
+                <th>Revisado</th>
                 <th>Artist</th>
                 <th>Song</th>
                 <th>Album</th>
-                <th>Ver Album</th>
-                <th>Revisado</th>
+                <th>Ver Albums</th>                
                 <th>Like</th>
             </tr>
         </thead>
@@ -31,15 +39,14 @@
             @foreach (var item in Model)
             {
                 <tr>
-                    <td>@item.Artist</td>
-                    <td>@item.Song</td>
-                    <td>@item.Album</td>
-                    <td><a class="btn btn-light dark-mode" asp-action="VerAlbumsArtist" asp-route-id="@item.idArtistSpotify">Ver</a></td>
-
-
                     <td class="text-center">
                         <input type="checkbox" asp-for="@item.Revisado" class="form-check-input" id="@item.IdArtist-check" name="CheckItems[@item.IdArtist]" />
                     </td>
+                    <td>@item.Artist</td>
+                    <td>@item.Song</td>
+                    <td>@item.Album</td>
+
+                    <td><a class="btn btn-light dark-mode" asp-action="VerAlbumsArtist" asp-route-id="@item.idArtistSpotify">Ver</a></td>                    
 
                     <td class="text-center"><input type="checkbox" asp-for="@item.Like" class="form-check-input" id="@item.IdArtist-checklike" /></td>
                 </tr>
@@ -54,46 +61,28 @@
 @section Scripts {
     <script>
 
-        $("#cmbFechas").change(function () {
-            const addedAt = $(this).val();
-            var model = { addedAt: addedAt }
-            console.log(addedAt);
-            $.ajax({
-                url: '@Url.Action("Index","PlayList")',
-                type: 'POST',
-                data: model,
-                success: function (result) {
-                    $('#listado').html(result);
-                }
-            })
-
-        })
+    
+        
+    
 
 
-        $('input[type=checkbox]').change(function () {
-            var check = $(this);
-            var cadena = check.attr("id").split("-");
+        // $("#cmbFechas").change(function () {
+        //     const addedAt = $(this).val();
+        //     var model = { addedAt: addedAt }
+        //     console.log(addedAt);
+        //     $.ajax({
+        //         url: '@Url.Action("Index","PlayList")',
+        //         type: 'POST',
+        //         data: model,
+        //         success: function (result) {
+        //             $('#listado').html(result);
+        //         }
+        //     })
 
-            var idArtista = cadena[0];
-            var idCheck = idArtista + '-check';
-            var idCheckLike = idArtista + '-checklike';
-            var revisado = $("input[type='checkbox'][id='" + idCheck + "']").is(":checked");
-            var like = $("input[type='checkbox'][id='" + idCheckLike + "']").is(":checked");
+        // })
 
-            var model = {
-                IdArtist: idArtista,
-                Revisado: revisado,
-                Like: like
-            }
-            $.ajax({
-                url: '@Url.Action("Actualiza","PlayList")',
-                type: 'POST',
-                data: model,
-                success: function (result) {
 
-                }
-            })
-        })
+        
 
     </script>
 }

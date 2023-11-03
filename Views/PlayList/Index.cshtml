@@ -5,7 +5,8 @@
 }
 
 <body class="dark-mode">
-    <div id="listado">
+    <div id="listado">        
+
         <partial name="_Playlist" />
     </div>
 </body>
@@ -13,10 +14,14 @@
 @section Scripts {
     <script>
 
-        $("#cmbFechas").change(function () {
-            const addedAt = $(this).val();
-            var model = { addedAt: addedAt }
-            console.log(addedAt);
+        
+
+        // Asignación de evento al contenedor de la vista parcial
+        document.getElementById('listado').addEventListener('change', function (event) {
+            var target = event.target;
+                                                
+            const addedAt = target.value;
+            var model = { addedAt: addedAt }            
             $.ajax({
                 url: '@Url.Action("Index","PlayList")',
                 type: 'POST',
@@ -24,9 +29,12 @@
                 success: function (result) {
                     $('#listado').html(result);
                 }
-            })
+            })                        
+                        
+        });
 
-        })
+
+        
 
 
         $('input[type=checkbox]').change(function () {

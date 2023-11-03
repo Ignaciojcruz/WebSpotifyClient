@@ -7,16 +7,16 @@
 <body style="background-color:black">
     <div class="row">
         <div class="col-md-6">
-            <div id="carousel" class="carousel slide" data-bs-ride="carousel">
+            <div id="carousel" class="carousel slide" data-bs-ride="carousel" data-pause="hover">
                 <div class="carousel-inner">
                     @{
                         int j = 0;
-                        @foreach (Album item in Model)
+                            @foreach (Album item in Model)
                         {
                             string active = j == 0 ? "active" : "";
-                            <div class="carousel-item @active" data-name="@item.Name" data-propiedad-lista="@item.Tracks">
-                                <img src="@item.UrlImage" class="d-block" />                            
-                            </div>
+                                <div class="carousel-item @active" data-name="@item.Name" data-propiedad-lista="@item.TracksJson">
+                                    <img src="@item.UrlImage" class="d-block" />                            
+                                </div>
 
                             j++;
                         }
@@ -27,10 +27,10 @@
                 <div class="carousel-indicators">
                     @{
                         int i = 0;
-                        @foreach (Album item in Model)
+                            @foreach (Album item in Model)
                         {
                             string active = i == 0 ? "active" : "";
-                            <button type="button" data-bs-target="#carousel" data-bs-slide-to="@i" class="@active"></button>
+                                <button type="button" data-bs-target="#carousel" data-bs-slide-to="@i" class="@active"></button>
                             i++;
                         }
                     }
@@ -61,31 +61,55 @@
         <script>
             var myCarousel = document.querySelector('#carousel');
             var carouselText = document.querySelector("#carousel-text")
+                        
+            // myCarousel.addEventListener('slid.bs.carousel', function (event) {
+            //     var activeSlide = event.relatedTarget
+            //     var slideNumber = Array.from(myCarousel.querySelectorAll('.carousel-item')).indexOf(activeSlide) + 1;
 
-            myCarousel.addEventListener('slid.bs.carousel', function (event) {
-                var activeSlide = event.relatedTarget                
-                var slideNumber = Array.from(myCarousel.querySelectorAll('.carousel-item')).indexOf(activeSlide) + 1;
-                carouselText.textContent = 'Slide ' + slideNumber;
+            //     // console.log(slideNumber);
 
-            })
+            //     // carouselText.textContent = 'Slide ' + slideNumber.toString();
+
+            // })
 
             $('#carousel').on('slid.bs.carousel', function () {
                 var elementoActual = $('.carousel-item.active'); // Encontramos el elemento actual del Carousel
                 var propiedad = elementoActual.data('name'); // Obtenemos la propiedad del elemento actual
+                console.log(elementoActual);
+                
                 $('#titulo').text(propiedad); // Mostramos la propiedad en el elemento <p>
 
-                //var cadenaJson = elementoActual.data('propiedad-lista');
-                //console.log(cadenaJson);
-                //var propiedadLista = JSON.parse(cadenaJson);
-                //console.log(propiedadLista);
+                var cadenaJson = elementoActual.data('propiedad-lista');                
+                var propiedadLista = cadenaJson;
+                
+                $('#lista').empty();
 
-                //$('#lista').empty();
-
-                //propiedadLista.forEach(function (elemento) {
-                //    var elementoLi = $('<li>').text(elemento);
-                //    $('#lista').append(elementoLi);
-                //});
+                propiedadLista.forEach(function (elemento) {                
+                   var elementoLi = $('<li>').text(elemento.Name);
+                   $('#lista').append(elementoLi);
+                });
             })
+
+
+            //primera ejecución
+            $(document).ready(function () {
+                var elementoActual = $('.carousel-item.active'); // Encontramos el elemento actual del Carousel
+                var propiedad = elementoActual.data('name'); // Obtenemos la propiedad del elemento actual
+                console.log(elementoActual);
+
+                $('#titulo').text(propiedad); // Mostramos la propiedad en el elemento <p>
+
+                var cadenaJson = elementoActual.data('propiedad-lista');
+                var propiedadLista = cadenaJson;
+
+                $('#lista').empty();
+
+                propiedadLista.forEach(function (elemento) {
+                    var elementoLi = $('<li>').text(elemento.Name);
+                    $('#lista').append(elementoLi);
+                });
+            });
+
 
 
 

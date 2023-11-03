@@ -48,7 +48,7 @@ namespace WebSpotifyClient.Servicios
         public async Task<IEnumerable<DateTime>> ObtenerFechas()
         {
             using var connection = new SqlConnection(connectionString);
-            return await connection.QueryAsync<DateTime>(@"select distinct addedat from RelationPlayListTrack");
+            return await connection.QueryAsync<DateTime>(@"select distinct addedat from RelationPlayListTrack order by 1 desc");
         }
 
     }
